@@ -1,10 +1,12 @@
 import * as React from "react";
 
-interface IButtonsProps {}
+interface IButtonsProps {
+	targetButton: Function;
+}
 
-const Buttons: React.FunctionComponent<IButtonsProps> = (): JSX.Element => {
+const Buttons: React.FunctionComponent<IButtonsProps> = ({ targetButton }): JSX.Element => {
 	return (
-		<div className="buttons">
+		<div className="buttons" onClick={event => targetButton(event)}>
 			<button className="button operator">x²</button>
 			<button className="button operator">CE</button>
 			<button className="button operator">C</button>
