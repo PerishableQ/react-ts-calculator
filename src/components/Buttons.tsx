@@ -1,12 +1,12 @@
 import * as React from "react";
 
 interface IButtonsProps {
-	targetButton: Function;
+	targetButton: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const Buttons: React.FunctionComponent<IButtonsProps> = ({ targetButton }): JSX.Element => {
 	return (
-		<div className="buttons" onClick={event => targetButton(event)}>
+		<div className="buttons" onClick={targetButton}>
 			<button className="button operator">x²</button>
 			<button className="button operator">CE</button>
 			<button className="button operator">C</button>

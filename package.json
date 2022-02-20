@@ -2,7 +2,7 @@
 	"name": "calculator-ts",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://perishableq.github.io/react-calculator",
+	"homepage": "https://perishableq.github.io/react-ts-calculator",
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.16.2",
 		"@testing-library/react": "^12.1.3",

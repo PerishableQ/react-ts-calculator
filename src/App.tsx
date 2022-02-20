@@ -1,13 +1,19 @@
+import { useState } from "react";
+
 import Buttons from "./components/Buttons";
-import Container from "./components/Container";
 import Display from "./components/Display";
 
-import { handleNumberClick, handleOperatorClick, useAppState } from "./utils";
+import { handleNumberClick, handleOperatorClick } from "./utils";
+
+import { IState } from "./interfaces";
 
 import "./App.css";
 
 const App = () => {
-	const [state, setState] = useAppState();
+	const [state, setState] = useState<IState>({
+		inputTop: "",
+		inputResult: ""
+	});
 
 	const handleClick = (event: React.MouseEvent) => {
 		const keyPressed = (event.target as HTMLInputElement).innerText;
@@ -20,10 +26,10 @@ const App = () => {
 	};
 
 	return (
-		<Container>
+		<section className="app">
 			<Display top={state.inputTop} result={state.inputResult} />
-			<Buttons targetButton={(event: React.MouseEvent) => handleClick(event)} />
-		</Container>
+			<Buttons targetButton={handleClick} />
+		</section>
 	);
 };
 

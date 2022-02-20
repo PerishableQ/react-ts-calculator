@@ -1,15 +1,4 @@
-import { useState } from "react";
-
 import { IState } from "./interfaces";
-
-export const useAppState = (): [IState, React.Dispatch<React.SetStateAction<IState>>] => {
-	const [state, setState] = useState<IState>({
-		inputTop: "",
-		inputResult: ""
-	});
-
-	return [state, setState];
-};
 
 export const handleNumberClick = (
 	keyPressed: string,
@@ -143,70 +132,85 @@ export const handleOperatorClick = (
 	}
 };
 
-export const calculateResult = (eq: string, callback?: Function) => {
-	const mulDiv = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([*/])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
-	const plusMin = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([+-])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
+export const calculateResult = (equation: string): string => {
+	const multiplyDivide = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([*/])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
+	const plusMinus = /([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*([+-])\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)/;
 	const parentheses = /(\d)?\s*\(([^()]*)\)\s*/;
-	var current;
-	while (eq.search(/^\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*$/) === -1) {
-		eq = fParentheses(eq);
-		if (eq === current)
-			return handleCallback(new SyntaxError("The equation is invalid."), null);
-		current = eq;
-	}
-	return handleCallback(null, +eq);
 
-	function fParentheses(eq: string) {
-		while (eq.search(parentheses) !== -1) {
-			eq = eq.replace(parentheses, (a, b, c) => {
-				c = fMulDiv(c);
-				c = fPlusMin(c);
+	let originalEquation = equation;
+	let currentEquation;
+
+	while (originalEquation.search(/^\s*([+-]?\d*\.?\d+(?:e[+-]\d+)?)\s*$/) === -1) {
+		originalEquation = calculateParentheses(originalEquation);
+
+		if (originalEquation === currentEquation) {
+			return "Error";
+		}
+
+		currentEquation = originalEquation;
+	}
+
+	return originalEquation;
+
+	function calculateParentheses(equation: string) {
+		while (equation.search(parentheses) !== -1) {
+			equation = equation.replace(parentheses, (a, b, c) => {
+				c = handleMultiplicationDivision(c);
+				c = handleAdditionSubtraction(c);
+
 				return typeof b === "string" ? b + "*" + c : c;
 			});
 		}
-		eq = fMulDiv(eq);
-		eq = fPlusMin(eq);
-		return eq;
+
+		equation = handleMultiplicationDivision(equation);
+		equation = handleAdditionSubtraction(equation);
+
+		return equation;
 	}
 
-	function fMulDiv(eq: any) {
-		while (eq.search(mulDiv) !== -1) {
-			eq = eq.replace(mulDiv, (a: any) => {
-				const sides = mulDiv.exec(a) as RegExpExecArray;
+	function handleMultiplicationDivision(equation: string) {
+		while (equation.search(multiplyDivide) !== -1) {
+			equation = equation.replace(multiplyDivide, a => {
+				const sides = multiplyDivide.exec(a);
+
+				if (sides === null) {
+					return "";
+				}
+
 				const result = sides[2] === "*" ? +sides[1] * +sides[3] : +sides[1] / +sides[3];
-				return result >= 0 ? "+" + result : result;
+
+				return result >= 0 ? "+" + result : `${result}`;
 			});
 		}
-		return eq;
+
+		return equation;
 	}
 
-	function fPlusMin(eq: string): string {
-		eq = eq.replace(/([+-])([+-])(\d|\.)/g, function (a, b, c, d) {
+	function handleAdditionSubtraction(equation: string): string {
+		equation = equation.replace(/([+-])([+-])(\d|\.)/g, (a, b, c, d) => {
 			return (b === c ? "+" : "-") + d;
 		});
-		while (eq.search(plusMin) !== -1) {
-			eq = eq.replace(plusMin, a => {
-				const sides = plusMin.exec(a) as RegExpExecArray;
+
+		while (equation.search(plusMinus) !== -1) {
+			equation = equation.replace(plusMinus, a => {
+				const sides = plusMinus.exec(a);
+
+				if (sides === null) {
+					return "";
+				}
+
 				return sides![2] === "+"
 					? `${+sides[1] + +sides[3]}`
 					: `${+sides![1] - +sides![3]}`;
 			});
 		}
-		return eq;
-	}
 
-	function handleCallback(errObject: Error | null, result: number | null) {
-		if (typeof callback !== "function") {
-			if (errObject !== null) throw errObject;
-		} else {
-			callback(errObject, result);
-		}
-		return result;
+		return equation;
 	}
 };
 
-export const invertNumberSign = (num: string) => {
+export const invertNumberSign = (num: string): string => {
 	const number = Number(num);
 
-	return number >= 0 ? `${-Math.abs(number)}` : `${Math.abs(number)}`;
+	return `${number * -1}`;
 };
