@@ -1,3 +1,4 @@
+import { Keys } from "./enums";
 import { IState } from "./interfaces";
 
 export const handleNumberClick = (
@@ -17,28 +18,30 @@ export const handleOperatorClick = (
 	setState: React.Dispatch<React.SetStateAction<IState>>
 ) => {
 	switch (keyPressed) {
-		case "+":
-		case "-":
-		case "*":
-		case "/": {
+		case Keys.PLUS:
+		case Keys.MINUS:
+		case Keys.MULTIPLY:
+		case Keys.DIVIDE: {
 			setState({
 				...state,
-				inputTop: state.inputTop + state.inputResult + keyPressed,
+				inputFormula: state.inputFormula + state.inputResult + keyPressed,
 				inputResult: ""
 			});
 			break;
 		}
-		case "=": {
-			const result = calculateResult(state.inputTop + state.inputResult);
+
+		case Keys.EQUALS: {
+			const result = calculateResult(state.inputFormula + state.inputResult);
 
 			setState({
 				...state,
-				inputTop: state.inputTop + state.inputResult + keyPressed,
+				inputFormula: state.inputFormula + state.inputResult + keyPressed,
 				inputResult: `${result}`
 			});
 			break;
 		}
-		case "x²": {
+
+		case Keys.SQUARE: {
 			const result = Math.pow(Number(state.inputResult), 2);
 
 			if (state.inputResult === "") {
@@ -51,7 +54,8 @@ export const handleOperatorClick = (
 			});
 			break;
 		}
-		case "√": {
+
+		case Keys.SQUARE_ROOT: {
 			const result = Math.sqrt(Number(state.inputResult));
 
 			if (state.inputResult === "") {
@@ -64,29 +68,33 @@ export const handleOperatorClick = (
 			});
 			break;
 		}
-		case "Delete": {
+
+		case Keys.DELETE: {
 			setState({
 				...state,
 				inputResult: state.inputResult.slice(0, -1)
 			});
 			break;
 		}
-		case "CE": {
+
+		case Keys.CLEAR_ENTRY: {
 			setState({
 				...state,
 				inputResult: ""
 			});
 			break;
 		}
-		case "C": {
+
+		case Keys.CLEAR: {
 			setState({
 				...state,
-				inputTop: "",
+				inputFormula: "",
 				inputResult: ""
 			});
 			break;
 		}
-		case ".": {
+
+		case Keys.DOT: {
 			if (state.inputResult.length < 1) {
 				setState({
 					...state,
@@ -94,6 +102,7 @@ export const handleOperatorClick = (
 				});
 				break;
 			}
+
 			if (state.inputResult.length > 1 && state.inputResult.includes(".")) {
 				break;
 			}
@@ -104,21 +113,24 @@ export const handleOperatorClick = (
 			});
 			break;
 		}
-		case "(": {
+
+		case Keys.PARENTHESES_LEFT: {
 			setState({
 				...state,
 				inputResult: state.inputResult + "("
 			});
 			break;
 		}
-		case ")": {
+
+		case Keys.PARENTHESES_RIGHT: {
 			setState({
 				...state,
 				inputResult: state.inputResult + ")"
 			});
 			break;
 		}
-		case "+/-": {
+
+		case Keys.PLUS_MINUS: {
 			if (state.inputResult === "") {
 				break;
 			}

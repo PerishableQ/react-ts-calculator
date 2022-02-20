@@ -11,7 +11,7 @@ import "./App.css";
 
 const App = () => {
 	const [state, setState] = useState<IState>({
-		inputTop: "",
+		inputFormula: "",
 		inputResult: ""
 	});
 
@@ -27,7 +27,7 @@ const App = () => {
 
 	return (
 		<section className="app">
-			<Display top={state.inputTop} result={state.inputResult} />
+			<Display formula={state.inputFormula} result={state.inputResult} />
 			<Buttons targetButton={handleClick} />
 		</section>
 	);

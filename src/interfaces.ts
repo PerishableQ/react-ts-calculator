@@ -1,4 +1,4 @@
 export interface IState {
-	inputTop: string;
+	inputFormula: string;
 	inputResult: string;
 }

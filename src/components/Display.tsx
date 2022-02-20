@@ -1,15 +1,15 @@
 import * as React from "react";
 
 interface IDisplayProps {
-	top: string;
+	formula: string;
 	result: string;
 }
 
-const Display: React.FunctionComponent<IDisplayProps> = ({ top, result}) => {
+const Display: React.FunctionComponent<IDisplayProps> = ({ formula, result}) => {
 	return (
 		<div className="input-area">
 			<div className="input-container">
-				<div className="input-top">{top}</div>
+				<div className="input-formula">{formula}</div>
 				<div className="input-result">{result}</div>
 			</div>
 		</div>

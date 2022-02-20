@@ -1,0 +1,16 @@
+export enum Keys {
+	PARENTHESES_LEFT = "(",
+	PARENTHESES_RIGHT = ")",
+	DOT = ".",
+	CLEAR = "C",
+	CLEAR_ENTRY = "CE",
+	DELETE = "Delete",
+	MULTIPLY = "*",
+	DIVIDE = "/",
+	PLUS = "+",
+	MINUS = "-",
+	EQUALS = "=",
+	PLUS_MINUS = "+/-",
+	SQUARE_ROOT = "√",
+	SQUARE = "x²",
+}
